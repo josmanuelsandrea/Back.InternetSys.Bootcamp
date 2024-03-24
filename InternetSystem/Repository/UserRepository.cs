@@ -1,4 +1,5 @@
 ﻿using InternetSystem.DBModels;
+using InternetSystem.Models;
 
 namespace InternetSystem.Repository
 {
@@ -15,6 +16,7 @@ namespace InternetSystem.Repository
         {
             var ctx = new InternetsysContext();
             var userFound = ctx.Users.Where(x => x.Userid == id).FirstOrDefault();
+            
             return userFound;
         }
 
