@@ -11,11 +11,19 @@ namespace InternetSystem.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly UserRepository UserR;
+        private readonly InternetsysContext _db;
+
+        public UserController()
+        {
+            _db = new InternetsysContext();
+            UserR = new UserRepository(_db);
+        }
+
         // GET: api/<User>
         [HttpGet]
         public List<User> Get()
         {
-            var UserR = new UserRepository();
             return UserR.GetUsers();
         }
 
@@ -23,8 +31,10 @@ namespace InternetSystem.Controllers
         [HttpGet("{id}")]
         public GenericResponse<User> Get(int id)
         {
+            // When we use generic responses, we have default response messages, status code and data, everytime we need to use
+            // generic responses WE NEED to setup the responses before sending it to the view in case there is not error.
+            // please check the GenericResponse code to check out the default values.
             var genericResponse = new GenericResponse<User>();
-            var UserR = new UserRepository();
             var userFound = UserR.GetUser(id);
             if (userFound != null)
             {
@@ -36,8 +46,9 @@ namespace InternetSystem.Controllers
 
         // POST api/<User>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] )
         {
+
         }
 
         // PUT api/<User>/5
