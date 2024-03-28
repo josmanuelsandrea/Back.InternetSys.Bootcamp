@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
 public partial class Userstatus
 {

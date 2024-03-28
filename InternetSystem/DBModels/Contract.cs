@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
 public partial class Contract
 {
-    public int Contracit { get; set; }
+    public int Contractid { get; set; }
 
     public DateTime Startdate { get; set; }
 
@@ -22,6 +22,8 @@ public partial class Contract
     public virtual Client ClientClient { get; set; } = null!;
 
     public virtual Methodpayment MethodpaymentMethodpayment { get; set; } = null!;
+
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual Service ServiceService { get; set; } = null!;
 

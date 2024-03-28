@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
 public partial class Client
 {
     public int Clientid { get; set; }
 
+    public string Identification { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     public string Lastname { get; set; } = null!;
-
-    public string Identification { get; set; } = null!;
 
     public string? Email { get; set; }
 

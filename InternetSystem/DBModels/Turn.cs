@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
 public partial class Turn
 {
@@ -12,8 +12,6 @@ public partial class Turn
     public DateTime Date { get; set; }
 
     public int CashCashid { get; set; }
-
-    public int Usergestorid { get; set; }
 
     public virtual ICollection<Attention> Attentions { get; set; } = new List<Attention>();
 

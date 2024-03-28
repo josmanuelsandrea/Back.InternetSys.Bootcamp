@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
 public partial class Cash
 {
@@ -12,4 +12,6 @@ public partial class Cash
     public string Active { get; set; } = null!;
 
     public virtual ICollection<Turn> Turns { get; set; } = new List<Turn>();
+
+    public virtual ICollection<Usercash> Usercashes { get; set; } = new List<Usercash>();
 }

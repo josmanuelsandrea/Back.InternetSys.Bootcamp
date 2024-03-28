@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
-public partial class InternetsysContext : DbContext
+public partial class BackendbootcampContext : DbContext
 {
-    public InternetsysContext()
-    {
-    }
-
-    public InternetsysContext(DbContextOptions<InternetsysContext> options)
+    public BackendbootcampContext(DbContextOptions<BackendbootcampContext> options)
         : base(options)
     {
     }
@@ -28,6 +24,8 @@ public partial class InternetsysContext : DbContext
     public virtual DbSet<Contract> Contracts { get; set; }
 
     public virtual DbSet<Device> Devices { get; set; }
+
+    public virtual DbSet<Menu> Menus { get; set; }
 
     public virtual DbSet<Methodpayment> Methodpayments { get; set; }
 
@@ -47,15 +45,11 @@ public partial class InternetsysContext : DbContext
 
     public virtual DbSet<Userstatus> Userstatuses { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-58II6GR\\SQLEXPRESS;Database=internetsys;Trusted_Connection=true;TrustServerCertificate=True;Persist Security Info=true");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Attention>(entity =>
         {
-            entity.HasKey(e => e.Attentionid).HasName("PK__attentio__99FD3552183EA79C");
+            entity.HasKey(e => e.Attentionid).HasName("PK_ATTENTIONID");
 
             entity.ToTable("attention");
 
@@ -71,27 +65,27 @@ public partial class InternetsysContext : DbContext
             entity.HasOne(d => d.AttentionstatusStatus).WithMany(p => p.Attentions)
                 .HasForeignKey(d => d.AttentionstatusStatusid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__attention__atten__5441852A");
+                .HasConstraintName("FK_ATTENTION_ATTENTIONSTATUS");
 
             entity.HasOne(d => d.AttentiontypeAttentiontype).WithMany(p => p.Attentions)
                 .HasForeignKey(d => d.AttentiontypeAttentiontypeid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__attention__atten__534D60F1");
+                .HasConstraintName("FK_ATTENTION_ATTENTIONTYPEID");
 
             entity.HasOne(d => d.ClientClient).WithMany(p => p.Attentions)
                 .HasForeignKey(d => d.ClientClientid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__attention__clien__52593CB8");
+                .HasConstraintName("FK_ATTENTION_CLIENTID");
 
             entity.HasOne(d => d.TurnTurn).WithMany(p => p.Attentions)
                 .HasForeignKey(d => d.TurnTurnid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__attention__turn___5165187F");
+                .HasConstraintName("FK_ATTENTION_TURNID");
         });
 
         modelBuilder.Entity<Attentionstatus>(entity =>
         {
-            entity.HasKey(e => e.Statusid).HasName("PK__attentio__36247E305E38644A");
+            entity.HasKey(e => e.Statusid).HasName("PK_ATTENTIONSTATUS");
 
             entity.ToTable("attentionstatus");
 
@@ -104,7 +98,7 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Attentiontype>(entity =>
         {
-            entity.HasKey(e => e.Attentiontypeid).HasName("PK__attentio__9D38AAA32B4B82C1");
+            entity.HasKey(e => e.Attentiontypeid).HasName("PK_ATTENTIONTYPE");
 
             entity.ToTable("attentiontype");
 
@@ -120,7 +114,7 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Cash>(entity =>
         {
-            entity.HasKey(e => e.Cashid).HasName("PK__cash__96014CBDFDD39481");
+            entity.HasKey(e => e.Cashid).HasName("PK_CASHID");
 
             entity.ToTable("cash");
 
@@ -137,13 +131,13 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Client>(entity =>
         {
-            entity.HasKey(e => e.Clientid).HasName("PK__client__819DC769D8A88916");
+            entity.HasKey(e => e.Clientid).HasName("PK_CLIENTID");
 
             entity.ToTable("client");
 
-            entity.Property(e => e.Clientid)
-                .ValueGeneratedNever()
-                .HasColumnName("clientid");
+            entity.HasIndex(e => e.Identification, "UQ__client__AAA7C1F5DA17CF4E").IsUnique();
+
+            entity.Property(e => e.Clientid).HasColumnName("clientid");
             entity.Property(e => e.Address)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -176,11 +170,11 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Contract>(entity =>
         {
-            entity.HasKey(e => e.Contracit).HasName("PK__contract__2ECBB3ABA00FB9E7");
+            entity.HasKey(e => e.Contractid).HasName("PK_CONTRACTID");
 
             entity.ToTable("contract");
 
-            entity.Property(e => e.Contracit).HasColumnName("contracit");
+            entity.Property(e => e.Contractid).HasColumnName("contractid");
             entity.Property(e => e.ClientClientid).HasColumnName("client_clientid");
             entity.Property(e => e.Enddate)
                 .HasColumnType("datetime")
@@ -198,27 +192,27 @@ public partial class InternetsysContext : DbContext
             entity.HasOne(d => d.ClientClient).WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.ClientClientid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__contract__client__5FB337D6");
+                .HasConstraintName("FK_CONTRACT_CLIENTID");
 
             entity.HasOne(d => d.MethodpaymentMethodpayment).WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.MethodpaymentMethodpaymentid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__contract__method__60A75C0F");
+                .HasConstraintName("FK_CONTRACT_METHODPAYMENTID");
 
             entity.HasOne(d => d.ServiceService).WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.ServiceServiceid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__contract__servic__5DCAEF64");
+                .HasConstraintName("FK_CONTRACT_SERVICEID");
 
             entity.HasOne(d => d.StatuscontractStatus).WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.StatuscontractStatusid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__contract__status__5EBF139D");
+                .HasConstraintName("FK_CONTRACT_STATUSCONTACTID");
         });
 
         modelBuilder.Entity<Device>(entity =>
         {
-            entity.HasKey(e => e.Deviceid).HasName("PK__device__84B9F7FFC7A50FA3");
+            entity.HasKey(e => e.Deviceid).HasName("PK_DEVICEID");
 
             entity.ToTable("device");
 
@@ -232,12 +226,35 @@ public partial class InternetsysContext : DbContext
             entity.HasOne(d => d.Service).WithMany(p => p.Devices)
                 .HasForeignKey(d => d.Serviceid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__device__servicei__46E78A0C");
+                .HasConstraintName("FK_DEVICE_SERVICEID");
+        });
+
+        modelBuilder.Entity<Menu>(entity =>
+        {
+            entity.HasKey(e => e.Menuid).HasName("PK__menu__3B5F7D5CFE9B4F6F");
+
+            entity.ToTable("menu");
+
+            entity.Property(e => e.Menuid).HasColumnName("menuid");
+            entity.Property(e => e.Description)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("description");
+            entity.Property(e => e.Icon)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("icon");
+            entity.Property(e => e.RolRolid).HasColumnName("rol_rolid");
+
+            entity.HasOne(d => d.RolRol).WithMany(p => p.Menus)
+                .HasForeignKey(d => d.RolRolid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_MENU_ROLID");
         });
 
         modelBuilder.Entity<Methodpayment>(entity =>
         {
-            entity.HasKey(e => e.Methodpaymentid).HasName("PK__methodpa__633563A4D383A0CB");
+            entity.HasKey(e => e.Methodpaymentid).HasName("PK_METHODPAYMENT");
 
             entity.ToTable("methodpayment");
 
@@ -250,12 +267,16 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Paymentid).HasName("PK__payments__AF26EBEE4C76AB28");
+            entity.HasKey(e => e.Paymentid).HasName("PK_PAYMENTID");
 
             entity.ToTable("payments");
 
             entity.Property(e => e.Paymentid).HasColumnName("paymentid");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("amount");
             entity.Property(e => e.Clientid).HasColumnName("clientid");
+            entity.Property(e => e.Contractid).HasColumnName("contractid");
             entity.Property(e => e.Paymentdate)
                 .HasColumnType("datetime")
                 .HasColumnName("paymentdate");
@@ -263,12 +284,17 @@ public partial class InternetsysContext : DbContext
             entity.HasOne(d => d.Client).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.Clientid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__payments__client__4BAC3F29");
+                .HasConstraintName("FK_PAYMENTS_CLIENTID");
+
+            entity.HasOne(d => d.Contract).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.Contractid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PAYMENTS_CONTRACTID");
         });
 
         modelBuilder.Entity<Rol>(entity =>
         {
-            entity.HasKey(e => e.Rolid).HasName("PK__rol__5403326CE74D28CD");
+            entity.HasKey(e => e.Rolid).HasName("PK_ROL");
 
             entity.ToTable("rol");
 
@@ -281,7 +307,7 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.Serviceid).HasName("PK__service__45516CA7FE40E607");
+            entity.HasKey(e => e.Serviceid).HasName("PK_SERVICEID");
 
             entity.ToTable("service");
 
@@ -302,7 +328,7 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Statuscontract>(entity =>
         {
-            entity.HasKey(e => e.Statusid).HasName("PK__statusco__36247E3008F49A89");
+            entity.HasKey(e => e.Statusid).HasName("PK_STATUSCONTRACT");
 
             entity.ToTable("statuscontract");
 
@@ -318,7 +344,7 @@ public partial class InternetsysContext : DbContext
 
         modelBuilder.Entity<Turn>(entity =>
         {
-            entity.HasKey(e => e.Turnid).HasName("PK__turn__C2FE6222B1A0C770");
+            entity.HasKey(e => e.Turnid).HasName("PK_TURNID");
 
             entity.ToTable("turn");
 
@@ -331,17 +357,16 @@ public partial class InternetsysContext : DbContext
                 .HasMaxLength(7)
                 .IsUnicode(false)
                 .HasColumnName("description");
-            entity.Property(e => e.Usergestorid).HasColumnName("usergestorid");
 
             entity.HasOne(d => d.CashCash).WithMany(p => p.Turns)
                 .HasForeignKey(d => d.CashCashid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__turn__cash_cashi__4E88ABD4");
+                .HasConstraintName("FK_TURN_CASHID");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Userid).HasName("PK__user__CBA1B2574E4F6F87");
+            entity.HasKey(e => e.Userid).HasName("PK_USERID");
 
             entity.ToTable("user");
 
@@ -349,9 +374,6 @@ public partial class InternetsysContext : DbContext
             entity.Property(e => e.Creationdate)
                 .HasColumnType("datetime")
                 .HasColumnName("creationdate");
-            entity.Property(e => e.Dateapproval)
-                .HasColumnType("datetime")
-                .HasColumnName("dateapproval");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -361,8 +383,6 @@ public partial class InternetsysContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("password");
             entity.Property(e => e.RolRolid).HasColumnName("rol_rolid");
-            entity.Property(e => e.Userapproval).HasColumnName("userapproval");
-            entity.Property(e => e.Usercreate).HasColumnName("usercreate");
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -375,36 +395,37 @@ public partial class InternetsysContext : DbContext
             entity.HasOne(d => d.RolRol).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RolRolid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__user__rol_rolid__571DF1D5");
+                .HasConstraintName("FK_USER_ROLID");
 
             entity.HasOne(d => d.UserstatusStatus).WithMany(p => p.Users)
                 .HasForeignKey(d => d.UserstatusStatusid)
-                .HasConstraintName("FK__user__userstatus__5812160E");
+                .HasConstraintName("FK_USER_USERSTATUSID");
         });
 
         modelBuilder.Entity<Usercash>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("usercash");
+            entity.HasKey(e => new { e.UserUserid, e.CashCashid }).HasName("PK_USERCASH");
 
-            entity.Property(e => e.CashCashid).HasColumnName("cash_cashid");
+            entity.ToTable("usercash");
+
             entity.Property(e => e.UserUserid).HasColumnName("user_userid");
+            entity.Property(e => e.CashCashid).HasColumnName("cash_cashid");
+            entity.Property(e => e.Gestorid).HasColumnName("gestorid");
 
-            entity.HasOne(d => d.CashCash).WithMany()
+            entity.HasOne(d => d.CashCash).WithMany(p => p.Usercashes)
                 .HasForeignKey(d => d.CashCashid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__usercash__cash_c__5AEE82B9");
+                .HasConstraintName("FK_USERCASH_CASHID");
 
-            entity.HasOne(d => d.UserUser).WithMany()
+            entity.HasOne(d => d.UserUser).WithMany(p => p.Usercashes)
                 .HasForeignKey(d => d.UserUserid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__usercash__user_u__59FA5E80");
+                .HasConstraintName("FK_USERCASH_USERID");
         });
 
         modelBuilder.Entity<Userstatus>(entity =>
         {
-            entity.HasKey(e => e.Statusid).HasName("PK__userstat__36247E30677C7A32");
+            entity.HasKey(e => e.Statusid).HasName("PK_STATUSID");
 
             entity.ToTable("userstatus");
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InternetSystem.DBModels;
+namespace BackendBootcamp.DBModels;
 
 public partial class User
 {
@@ -13,19 +13,15 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public int RolRolid { get; set; }
-
     public DateTime Creationdate { get; set; }
 
-    public int Usercreate { get; set; }
-
-    public int Userapproval { get; set; }
-
-    public DateTime Dateapproval { get; set; }
+    public int RolRolid { get; set; }
 
     public string? UserstatusStatusid { get; set; }
 
     public virtual Rol RolRol { get; set; } = null!;
+
+    public virtual ICollection<Usercash> Usercashes { get; set; } = new List<Usercash>();
 
     public virtual Userstatus? UserstatusStatus { get; set; }
 }
